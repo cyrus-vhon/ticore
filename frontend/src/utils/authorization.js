@@ -276,6 +276,14 @@ export function sanitizeAuthError(error, context = 'general') {
     return 'Your new password must be different from your current password.'
   }
 
+  if (
+    rawMessage.includes('otp_expired') ||
+    rawMessage.includes('email link is invalid or has expired') ||
+    rawMessage.includes('token has expired')
+  ) {
+    return 'The email verification link has expired or has already been used. Please request a new confirmation link.'
+  }
+
   if (rawMessage.includes('jwt expired') || rawMessage.includes('session_not_found')) {
     return 'Your session has expired. Please sign in again to continue.'
   }

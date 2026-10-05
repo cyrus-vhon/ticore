@@ -14,6 +14,7 @@ import LoginPage from './pages/auth/LoginPage.jsx'
 import RegisterPage from './pages/auth/RegisterPage.jsx'
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage.jsx'
 import ResetPasswordPage from './pages/auth/ResetPasswordPage.jsx'
+import AuthCallbackPage from './pages/auth/AuthCallbackPage.jsx'
 import UnauthorizedPage from './pages/auth/UnauthorizedPage.jsx'
 import NotFoundPage from './pages/public/NotFoundPage.jsx'
 import ServerErrorPage from './pages/public/ServerErrorPage.jsx'
@@ -163,6 +164,8 @@ function App() {
             <OfficialPortalPage navigateTo={navigateTo} />
           </ProtectedRoute>
         )
+      case 'auth-callback':
+        return <AuthCallbackPage navigateTo={navigateTo} />
       case 'not-found':
         return <NotFoundPage navigateTo={navigateTo} />
       case 'server-error':

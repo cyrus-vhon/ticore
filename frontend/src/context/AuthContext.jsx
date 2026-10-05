@@ -10,6 +10,7 @@ import {
   requestPasswordReset,
   updateCurrentUserPassword,
   updateOwnUserProfile,
+  resendConfirmationEmail,
 } from '../services/authService.js'
 import {
   isAuthenticatedUser,
@@ -322,6 +323,7 @@ export function AuthProvider({ children, navigateTo }) {
       updateProfile,
       sendPasswordReset,
       changePassword,
+      resendConfirmation: resendConfirmationEmail,
     }),
     [
       session,
@@ -330,6 +332,7 @@ export function AuthProvider({ children, navigateTo }) {
       loading,
       isPasswordRecovery,
       authNotice,
+      setAuthNotice,
       clearAuthNotice,
       intendedRoute,
       isAuthenticated,

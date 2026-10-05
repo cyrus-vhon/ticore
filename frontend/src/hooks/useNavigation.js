@@ -19,6 +19,7 @@ export const VALID_PAGES = [
   'official-closures',
   'official-portal',
   'official-reports',
+  'auth-callback',
   'unauthorized',
   'not-found',
   'server-error',
@@ -31,6 +32,9 @@ export const ROUTE_ALIASES = Object.freeze({
   admin: 'official-dashboard',
   reports: 'official-reports',
   error: 'server-error',
+  callback: 'auth-callback',
+  'auth-error': 'auth-callback',
+  confirm: 'auth-callback',
 })
 
 /**
@@ -41,17 +45,39 @@ export function resolveRouteFromLocation(defaultPage = 'home') {
 
   const fullHash = (window.location.hash || '').replace(/^#\/?/, '').trim()
   const rawPath = (window.location.pathname || '').replace(/^\/+|\/+$/g, '').trim().toLowerCase()
+  const search = window.location.search || ''
 
   // 1. Password recovery detection from hash or search query
   if (
     fullHash.includes('type=recovery') ||
     fullHash.startsWith('reset-password') ||
-    (window.location.search && window.location.search.includes('type=recovery'))
+    search.includes('type=recovery')
   ) {
     return 'reset-password'
   }
 
-  // 2. Hash-based routing check (e.g. /#calendar, /#reservation, /#official-dashboard)
+  // 2. Auth error detection (e.g. otp_expired, access_denied from expired confirmation links)
+  if (
+    fullHash.includes('error=') ||
+    fullHash.includes('error_code=') ||
+    search.includes('error=') ||
+    search.includes('error_code=')
+  ) {
+    return 'auth-callback'
+  }
+
+  // 3. Auth token/callback detection (e.g. #access_token=..., #type=signup, ?code=...)
+  if (
+    fullHash.includes('access_token=') ||
+    fullHash.includes('type=signup') ||
+    fullHash.includes('type=email_change') ||
+    fullHash.includes('type=invite') ||
+    search.includes('code=')
+  ) {
+    return 'auth-callback'
+  }
+
+  // 4. Hash-based routing check (e.g. /#calendar, /#reservation, /#official-dashboard)
   if (fullHash) {
     const rawBase = fullHash.split('?')[0].split('&')[0].toLowerCase()
     const target = ROUTE_ALIASES[rawBase] || rawBase
@@ -61,7 +87,7 @@ export function resolveRouteFromLocation(defaultPage = 'home') {
     return 'not-found'
   }
 
-  // 3. Pathname-based direct routing check (e.g. /calendar, /reservation, /login, /dashboard)
+  // 5. Pathname-based direct routing check (e.g. /calendar, /reservation, /login, /dashboard)
   if (rawPath) {
     const rawBase = rawPath.split('/')[0].split('?')[0]
     const target = ROUTE_ALIASES[rawBase] || rawBase

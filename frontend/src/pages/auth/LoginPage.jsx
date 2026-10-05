@@ -4,7 +4,8 @@ import Card from '../../components/common/Card.jsx'
 import Alert from '../../components/common/Alert.jsx'
 import Badge from '../../components/common/Badge.jsx'
 import useAuth from '../../hooks/useAuth.js'
-import { isVerifiedOfficial } from '../../utils/authorization.js'
+import { isVerifiedOfficial, sanitizeAuthError } from '../../utils/authorization.js'
+import { resendConfirmationEmail } from '../../services/authService.js'
 
 export function LoginPage({ navigateTo }) {
   const {
@@ -22,10 +23,13 @@ export function LoginPage({ navigateTo }) {
   const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [resendingEmail, setResendingEmail] = useState(false)
+  const [resendStatus, setResendStatus] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
+    setResendStatus(null)
     clearAuthNotice()
 
     const cleanEmail = email.trim()
@@ -112,10 +116,53 @@ export function LoginPage({ navigateTo }) {
       )}
 
       {errorMsg && (
-        <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ marginBottom: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <Alert type="error" title="Sign-In Failed">
             {errorMsg}
           </Alert>
+
+          {errorMsg.toLowerCase().includes('verify your email') && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={resendingEmail || !email.trim()}
+                onClick={async () => {
+                  setResendingEmail(true)
+                  try {
+                    const { error } = await resendConfirmationEmail(email.trim())
+                    if (error) {
+                      setResendStatus({
+                        type: 'error',
+                        message: sanitizeAuthError(error, 'general'),
+                      })
+                    } else {
+                      setResendStatus({
+                        type: 'success',
+                        message: `A new confirmation email has been dispatched to ${email.trim()}. Please check your inbox.`,
+                      })
+                    }
+                  } catch {
+                    setResendStatus({
+                      type: 'error',
+                      message: 'Unable to dispatch confirmation email. Please try again later.',
+                    })
+                  } finally {
+                    setResendingEmail(false)
+                  }
+                }}
+              >
+                {resendingEmail ? 'Sending...' : 'Resend Confirmation Email'}
+              </Button>
+
+              {resendStatus && (
+                <Alert type={resendStatus.type} title={resendStatus.type === 'success' ? 'Dispatched' : 'Notice'}>
+                  {resendStatus.message}
+                </Alert>
+              )}
+            </div>
+          )}
         </div>
       )}
 

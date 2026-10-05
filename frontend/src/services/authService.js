@@ -260,6 +260,26 @@ export async function signOutUser() {
 }
 
 /**
+ * Resends the signup confirmation email for an unconfirmed resident account.
+ */
+export async function resendConfirmationEmail(email) {
+  const cleanEmail = String(email || '').trim().toLowerCase()
+  if (!cleanEmail) {
+    return { data: null, error: new Error('Please enter a valid email address.') }
+  }
+
+  const { data, error } = await supabase.auth.resend({
+    type: 'signup',
+    email: cleanEmail,
+    options: {
+      emailRedirectTo: `${window.location.origin}/#account`,
+    },
+  })
+
+  return { data, error }
+}
+
+/**
  * Sends a password reset email via Supabase Auth.
  */
 export async function requestPasswordReset(email) {
