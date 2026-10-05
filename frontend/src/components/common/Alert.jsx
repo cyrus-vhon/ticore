@@ -10,7 +10,7 @@ export function Alert({
 
   return (
     <aside className={classes} role={ariaRole} aria-label={title || 'Notice'}>
-      <div style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true">
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', marginTop: title ? '2px' : '1px' }} aria-hidden="true">
         {type === 'error' ? (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
@@ -36,8 +36,8 @@ export function Alert({
           </svg>
         )}
       </div>
-      <div style={{ flex: 1 }}>
-        {title && <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.9375rem', fontWeight: 600, color: 'inherit' }}>{title}</h4>}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {title && <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.9375rem', fontWeight: 600, color: 'inherit', lineHeight: 1.3 }}>{title}</h4>}
         <div style={{ fontSize: '0.875rem', lineHeight: 1.5 }}>{children}</div>
       </div>
     </aside>

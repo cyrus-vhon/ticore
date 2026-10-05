@@ -56,6 +56,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 h1 { font-size: clamp(2rem, 4vw, 2.75rem); }
@@ -547,14 +548,17 @@ a:hover {
 .badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  vertical-align: middle;
   gap: 0.375rem;
   padding: 0.25rem 0.625rem;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1;
   border: 1px solid transparent;
   text-transform: capitalize;
+  white-space: nowrap;
 }
 
 .badge-dot {
@@ -678,14 +682,18 @@ a:hover {
 }
 
 .form-label {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.875rem;
   font-weight: 600;
+  line-height: 1.4;
   color: var(--color-text-primary);
 }
 
 .form-label .required {
   color: #dc2626;
-  margin-left: 2px;
+  margin-left: 0.25rem;
+  line-height: 1;
 }
 
 .form-hint {
@@ -777,6 +785,7 @@ a:hover {
 .realtime-pill {
   display: inline-flex;
   align-items: center;
+  vertical-align: middle;
   gap: 0.5rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--color-border);
@@ -858,6 +867,32 @@ a:hover {
   .realtime-pill-dot.pulse {
     animation: none;
   }
+}
+
+/* Table Base Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-align: left;
+  vertical-align: middle;
+}
+
+td {
+  vertical-align: middle;
+}
+
+th.text-right, td.text-right {
+  text-align: right;
+}
+
+th.text-center, td.text-center {
+  text-align: center;
 }
 
 /* Responsive Table Container */

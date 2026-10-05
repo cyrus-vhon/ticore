@@ -308,7 +308,7 @@ export function AuthCallbackPage({ navigateTo }) {
                 <label className="form-label" htmlFor="resend-email">
                   Request New Confirmation Link
                 </label>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
                   <input
                     id="resend-email"
                     type="email"

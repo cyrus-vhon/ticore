@@ -69,11 +69,11 @@ export function ConfirmDialog({
             borderBottom: '1px solid var(--color-border-subtle)',
           }}
         >
-          <h3 id="confirm-dialog-title" style={{ margin: 0, fontSize: '1.125rem', color: 'var(--color-primary-dark)' }}>
+          <h3 id="confirm-dialog-title" style={{ margin: 0, fontSize: '1.125rem', color: 'var(--color-primary-dark)', lineHeight: 1.3 }}>
             {title}
           </h3>
           {description && (
-            <p style={{ margin: '0.375rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+            <p style={{ margin: '0.375rem 0 0', fontSize: '0.875rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
               {description}
             </p>
           )}
@@ -92,6 +92,7 @@ export function ConfirmDialog({
             borderTop: '1px solid var(--color-border-subtle)',
             display: 'flex',
             justifyContent: 'flex-end',
+            alignItems: 'center',
             gap: '0.75rem',
           }}
         >
